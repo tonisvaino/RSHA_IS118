@@ -1,13 +1,20 @@
 # RSHA_IS118
 
-Rakenduserverite halduse automatiseerimine ehk siis kuidas mitte olla ahv ja kõike käsitsi teha
+# Rakenduserverite halduse automatiseerimine
+ehk siis kuidas mitte olla ahv ja kõike käsitsi teha
 
-Installation: pole õrna aimugi
+# Installation
 
-Usage: Serveri halduse automatiseerimine
+pole õrna aimugi
 
-Contributions: ME
+# Usage
+Serveri halduse automatiseerimine
 
-Credits: ME
+# Contributions
+ME
 
-Licence: Wabavara
+# Credits
+ME
+
+# Licence
+Wabavara
