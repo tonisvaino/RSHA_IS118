@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#Kontrollib kas apache on paigaltatud
+
+apacheboolean=$(dpkg-query -W -f='${status}' apache2 | grep -c "ok installed")
+#dpkg query näitab mis paketid on installitud, apache2 otsib sealt listist apache2
+#grep -C ga näitab ainult mitu rida output on
+#ehk kui on 0 siis ei ole installitud ja kui on 1 siis on installitud
+
+#echo $apacheboolean
+#kontroll kas õige value on saved
+
+#kontroll kas on root kasutajaga skript käivitatud
+if [ $(id -u) -eq 0 ];
+then
+	if [ $apacheboolean -eq 0 ];				# kui apache2 ei ole installitud siis installib ära
+	then
+		apt-get update					#uuendab listi öra
+		echo "Apache2 installimine"
+		apt-get install -y apache2			# installib apache2 with no confirm
+		systemctl status apache2			#kontrollib apache2 saatust peale installi
+		echo "Apache2 is now installed"
+	else
+		if [ $apacheboolean -eq 1 ];			# Kui apache 2 on installitud pole seda mõtet uuesti installida
+		then
+			echo "apache is installed"		# Annab kasutajale infi teada
+		else
+			echo "something went wrong, send help"	# Kui command annab midagi ooatamatud välja siis annab selle ka teada
+		fi
+	fi
+else
+	echo "Ainult root kasutajaga saab installida apcahe2!" #NOT ROOT
+	exit 2
+fi
