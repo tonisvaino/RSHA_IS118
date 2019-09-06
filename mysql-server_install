@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#kontroll kas apache2 on installitud
+sh apache_install
+
+#root control
+if [ $(id -u) -eq 0 ];
+then
+	apt-get update                                  	#uuendab listi öra
+     	echo "php mysql-serveri installimine installimine"
+        apt-get install -y mysql-server                      	# installib mysql-serveri with no confirm
+	echo "Install completed"
+	systemctl status mysql					# Kontroll kas töötab
+else
+        echo "Ainult root kasutajaga saab installida pakette!" #NOT ROOT
+        exit 2
+fi
+
+
