@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#kontroll kas apache2 on installitud
+sh apache_install
+
+#root control
+if [ $(id -u) -eq 0 ];
+then
+	apt-get update                                  #uuendab listi öra
+     	echo "php 7.0 installimine installimine"
+        apt-get install -y php7.0                      # installib php7.0 with no confirm
+	apt-get install -y libapache2-mod-php7.0  php7.0-common	#Lisapakettid
+	echo "Install completed"
+else
+        echo "Ainult root kasutajaga saab installida pakette!" #NOT ROOT
+        exit 2
+fi
+
+
