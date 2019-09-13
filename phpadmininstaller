@@ -1,0 +1,26 @@
+!/bin/bash
+
+phpadminboolean=$(dpkg-query -W -f='${status}' phpmyadmin | grep -c "ok installed")
+
+
+if [ $(id -u) -eq 0 ];
+then
+        if [ $phpadminboolean -eq 0 ];
+        then
+                sh apacheinstaller
+                sh phpinstaller
+                apt-get update
+                apt-get install -y phpmyadmin php-mbstring php-gettext
+        else
+                if [ $phpadminboolean -eq 1 ];
+                then
+                        echo "Phpmyadmin on juba installitud"
+                else
+                        echo "ERROR: Moar stuffs outputted"
+                fi
+        fi
+else
+        echo "Root konto please, f off"
+        exit 2
+fi
+
