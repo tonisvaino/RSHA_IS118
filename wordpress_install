@@ -1,0 +1,56 @@
+#!/bin/bash
+
+#Kõikide vajalike paketiide kontroll
+
+apacheboolean=$(dpkg-query -W -f='${Status}' apache2 2>/dev/null | grep -c "ok installed")
+mysqlboolean=$(dpkg-query -W -f='${Status}' mysql-server 2>/dev/null | grep -c "ok installed")
+phpboolean=$(dpkg-query -W -f='${Status}' php7.3 2>/dev/null | grep -c "ok installed")
+myphpboolean=$(dpkg-query -W -f='${Status}' phpmyadmin 2>/dev/null | grep -c "ok installed")
+wpboolean=$(dpkg-query -W -f='${Status}' wordpress 2>/dev/null | grep -c "ok installed")
+
+#update uuendus
+apt-get update
+#root control
+if [ $(id -u) -eq 0 ];
+then
+
+        if [ $apacheboolean -eq 0 ];    #apache2 kontroll ja install
+        then
+                apt-get install -y apache2
+        elif [ $apacheboolean -eq 1 ];
+        then
+                echo "Apache2 on juba installitud"
+        if [ $mysqlboolean -eq 0 ];     #mysql kontroll ja install
+        then
+                cd /tmp
+                wget https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
+                apt-get install -y dpkg -i mysql-apt-config*
+                apt-get install -y mysql-server
+        elif [ $mysqlboolean -eq 1 ];
+        then
+                echo "mysql on juba paigaldatud"
+        if [ $phpboolean -eq 0 ];       #php kontroll ja install
+        then
+                apt-get install -y ca-certificates apt-transport-https lsb-release
+                wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+                echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php7$
+                apt-get install -y php7.3 php7.3-cli php7.3-common php7.3-opcache php7.3-curl php7.3-mbstring php7.3$
+        elif [ $phpboolean -eq 1 ];
+        then
+                echo "php7.3 on juba paigaldatud"
+        if [ $myphpboolean -eq 0 ];     #myphpadmini install ja kontroll
+        then
+                apt-get install phpmyadmin php-mbstring php-gettext
+        elif [ $myphpboolean -eq 1 ]; then
+                echo "myphpadmin on juba paigaldatud"
+        if [ $wpboolean -eq 0 ]; then
+                apt-get install -y wordpress
+        elif [ $wpboolean -eq 1 ]; then
+                echo "wordpress on installitud"
+        fi
+        fi
+        fi
+        fi
+        fi
+fi
+
